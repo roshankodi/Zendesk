@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b52">
+  <meta name="description" content="Zendesk is a local-first IT support ticket queue for employees and support teams.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Zendesk">
+  <meta property="og:title" content="Zendesk — IT Support">
+  <meta property="og:description" content="A local-first IT support ticket queue for employees and support teams.">
+  <title>Zendesk — IT Support</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#home">Skip to main content</a>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Zendesk home">
+      <span class="brand-symbol" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span>Zendesk</span>
+    </a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="#features">How it works</a>
+      <a href="#live-demo">Live queue</a>
+      <a href="#service-levels">Service levels</a>
+    </nav>
+    <div class="header-actions">
+      <span id="system-health" class="local-status is-checking" role="status" aria-live="polite">
+        <span class="health-indicator" aria-hidden="true"></span><span id="health-label">Checking API and database…</span>
+      </span>
+      <a class="button button-quiet" href="#ticket-queue">Agent portal</a>
+      <a class="button button-primary button-header" href="#ticket-title">Submit a ticket</a>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero" aria-labelledby="hero-title">
+      <canvas id="gateway-flow" class="gateway-flow" aria-hidden="true"></canvas>
+      <div class="hero-copy">
+        <p class="eyebrow">INTERNAL IT, MADE EASIER TO FOLLOW</p>
+        <h1 id="hero-title">Enterprise IT support, <span>resolved at the speed of thought.</span></h1>
+        <p class="hero-description">A clear place to raise a request, see what needs attention, and follow progress from open to resolved.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#ticket-title">Submit a ticket <span aria-hidden="true">→</span></a>
+          <a class="text-link" href="#live-demo">Explore the live queue <span aria-hidden="true">↓</span></a>
+        </div>
+        <p class="hero-footnote"><span aria-hidden="true">◇</span> Ticket records are stored in this app's local SQLite database.</p>
+      </div>
+
+      <section class="lookup-panel" aria-labelledby="lookup-title">
+        <div class="lookup-panel-heading">
+          <span class="lookup-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M4 7h10M4 12h7M4 17h5"></path><circle cx="17" cy="15" r="3.5"></circle><path d="m19.5 17.5 2 2"></path></svg>
+          </span>
+          <div>
+            <h2 id="lookup-title">Track a ticket</h2>
+            <p>Look up a request saved in the local ticket database.</p>
+          </div>
+        </div>
+        <form id="lookup-form" class="lookup-form">
+          <label class="sr-only" for="lookup-id">Ticket reference</label>
+          <input id="lookup-id" name="ticketId" type="search" placeholder="Enter a reference, e.g. TICK-1024" autocomplete="off" required>
+          <button class="button button-primary lookup-button" type="submit" aria-label="Look up ticket">
+            <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="8.5" cy="8.5" r="5.5"></circle><path d="m12.5 12.5 4 4"></path></svg>
+          </button>
+        </form>
+        <p class="lookup-hint">Use a ticket ID shown in the queue below.</p>
+        <div id="lookup-feedback" class="lookup-feedback" role="status" aria-live="polite" hidden></div>
+      </section>
+    </section>
+
+    <section id="service-levels" class="metrics-section" aria-labelledby="metrics-title">
+      <div class="metrics-intro">
+        <div>
+          <p class="eyebrow">DATABASE-BACKED SERVICE SIGNALS</p>
+          <h2 id="metrics-title">Measured from the queue.</h2>
+        </div>
+        <span id="telemetry-mode" class="telemetry-mode">Connecting to live metrics</span>
+      </div>
+      <div class="metrics-list" aria-label="Live ticket metrics">
+        <article class="metric-item">
+          <strong id="metric-response" class="metric-value">—</strong>
+          <p>Median first response</p>
+        </article>
+        <article class="metric-item">
+          <strong id="metric-sla" class="metric-value">—</strong>
+          <p>SLA compliance</p>
+        </article>
+        <article class="metric-item">
+          <strong id="metric-resolved" class="metric-value">—</strong>
+          <p>Tickets resolved this month</p>
+        </article>
+      </div>
+      <p id="telemetry-note" class="demo-disclaimer">Metrics use recorded ticket timestamps. A measure stays unavailable until eligible records exist.</p>
+    </section>
+
+    <section id="features" class="workflow-section" aria-labelledby="workflow-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">A USEFUL VIEW, WITHOUT THE NOISE</p>
+          <h2 id="workflow-title">From request to resolution.</h2>
+        </div>
+        <p>Every ticket keeps its essentials close: who needs help, what is affected, and where it stands.</p>
+      </div>
+      <div class="workflow-steps">
+        <article class="workflow-step">
+          <span class="step-mark" aria-hidden="true">A</span>
+          <div>
+            <h3>Start with the issue</h3>
+            <p>Share a title, requester, category, priority, and the details support needs.</p>
+          </div>
+        </article>
+        <article class="workflow-step">
+          <span class="step-mark" aria-hidden="true">B</span>
+          <div>
+            <h3>Make urgency visible</h3>
+            <p>High-priority requests use a clear label, symbol, and distinct row treatment.</p>
+          </div>
+        </article>
+        <article class="workflow-step">
+          <span class="step-mark" aria-hidden="true">C</span>
+          <div>
+            <h3>Keep progress current</h3>
+            <p>Move requests through Open, In Progress, and Resolved as work advances.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="live-demo" class="triage-section" aria-labelledby="triage-title">
+      <div class="section-heading triage-heading">
+        <div>
+          <p class="eyebrow">YOUR LOCAL REQUESTS</p>
+          <h2 id="triage-title">The queue, at a glance.</h2>
+        </div>
+        <a class="text-link" href="#ticket-queue">Open full queue <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="triage-board">
+        <div class="triage-board-top">
+          <div class="board-heading">
+            <span class="board-live-mark" aria-hidden="true"></span>
+            <span>Ticket triage</span>
+            <span id="preview-total" class="board-total">0</span>
+          </div>
+          <div class="board-tools">
+            <label for="triage-priority">Show priority</label>
+            <select id="triage-priority" class="board-filter">
+              <option value="">All priorities</option>
+              <option value="Critical">Critical</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+        </div>
+        <div id="triage-list" class="triage-list" aria-live="polite"></div>
+        <div class="triage-board-bottom">
+          <span>Newest requests appear first</span>
+          <a href="#ticket-title">Create a request <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="capabilities-section" aria-labelledby="capabilities-title">
+      <div class="capabilities-lead">
+        <p class="eyebrow">BUILT FOR THE NEXT CLEAR STEP</p>
+        <h2 id="capabilities-title">Good triage starts with good signals.</h2>
+        <p>Intake, priority changes, status transitions, and response timestamps are recorded by the local service. Automated root-cause analysis and timed escalation are not connected.</p>
+      </div>
+      <div class="capability-notes">
+        <article class="capability-note">
+          <span class="capability-index" aria-hidden="true">01</span>
+          <div>
+            <h3>Priority you can read</h3>
+            <p>Text, an SVG symbol, ARIA labeling, and a 2px border make urgent requests easy to spot.</p>
+          </div>
+        </article>
+        <article class="capability-note">
+          <span class="capability-index" aria-hidden="true">02</span>
+          <div>
+            <h3>Categories at intake</h3>
+            <p>Hardware, software, network, and account access give each request a useful starting point.</p>
+          </div>
+        </article>
+        <article class="capability-note capability-note-demo">
+          <span class="capability-index" aria-hidden="true">03</span>
+          <div>
+            <h3>SLA and escalation concepts</h3>
+            <p>Compliance is calculated from resolved records and their stored target; no background escalation runs in this version.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="ticket-queue" class="workspace-section" aria-label="Manage internal IT tickets">
+      <div class="workspace-title">
+        <div>
+          <p class="eyebrow">SUPPORT WORKSPACE</p>
+          <h2>Requests in progress.</h2>
+        </div>
+        <p>Changes save to the connected local SQLite database.</p>
+      </div>
+
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+      <section class="status-overview" aria-label="Ticket status totals">
+        <article class="summary-card summary-open">
+          <span class="summary-label"><span class="summary-dot" aria-hidden="true"></span>Open</span>
+          <strong id="open-count" class="summary-count">0</strong>
+          <span class="summary-caption">Waiting for support</span>
+        </article>
+        <article class="summary-card summary-progress">
+          <span class="summary-label"><span class="summary-dot" aria-hidden="true"></span>In progress</span>
+          <strong id="progress-count" class="summary-count">0</strong>
+          <span class="summary-caption">Being worked on</span>
+        </article>
+        <article class="summary-card summary-resolved">
+          <span class="summary-label"><span class="summary-dot" aria-hidden="true"></span>Resolved</span>
+          <strong id="resolved-count" class="summary-count">0</strong>
+          <span class="summary-caption">Ready to close out</span>
+        </article>
+      </section>
+
+      <div class="workspace">
+        <section class="queue-panel" aria-labelledby="queue-title">
+          <div class="queue-heading">
+            <div>
+              <p class="eyebrow">THE WORK IN FRONT OF YOU</p>
+              <h2 id="queue-title">Ticket queue <span id="ticket-total" class="total-badge">0</span></h2>
+            </div>
+            <label class="search-field">
+              <span class="sr-only">Search by ticket title or requester</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                <circle cx="8.7" cy="8.7" r="5.7"></circle>
+                <path d="m13 13 4 4"></path>
+              </svg>
+              <input id="ticket-search" type="search" placeholder="Search tickets..." autocomplete="off">
+            </label>
+            <label class="queue-filter">
+              <span class="sr-only">Filter tickets by priority</span>
+              <select id="queue-priority">
+                <option value="">All priorities</option>
+                <option value="Critical">Critical</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </label>
+          </div>
+          <div id="ticket-list" class="ticket-list" aria-live="polite"></div>
+        </section>
+
+        <aside class="create-panel" aria-labelledby="create-title">
+          <div class="form-heading">
+            <p class="eyebrow">NEW REQUEST</p>
+            <h2 id="create-title">Raise a ticket</h2>
+            <p>Give support the details they need to get started.</p>
+          </div>
+          <form id="ticket-form">
+            <div class="field">
+              <label for="ticket-title">Issue title <span aria-hidden="true">*</span></label>
+              <input id="ticket-title" name="title" type="text" maxlength="120" placeholder="e.g. Can't connect to Wi-Fi" required>
+            </div>
+            <div class="field">
+              <label for="requester">Requester <span aria-hidden="true">*</span></label>
+              <input id="requester" name="requester" type="text" maxlength="80" placeholder="Name of the person affected" required>
+            </div>
+            <div class="field-pair">
+              <div class="field">
+                <label for="category">Category <span aria-hidden="true">*</span></label>
+                <select id="category" name="category" required>
+                  <option value="">Choose one</option>
+                  <option value="Hardware">Hardware</option>
+                  <option value="Software">Software</option>
+                  <option value="Network">Network</option>
+                  <option value="Account access">Account access</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="priority">Priority <span aria-hidden="true">*</span></label>
+                <select id="priority" name="priority" required>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                  <option value="High">High</option>
+                  <option value="Critical">Critical</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="description">Description <span aria-hidden="true">*</span></label>
+              <textarea id="description" name="description" rows="4" maxlength="1000" placeholder="What happened, and what have you tried?" required></textarea>
+            </div>
+            <p class="required-note"><span aria-hidden="true">*</span> Required fields</p>
+            <button class="button button-primary create-button" type="submit">
+              <span aria-hidden="true">+</span> Create ticket
+            </button>
+          </form>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer id="operational-status" class="site-footer">
+    <a class="brand footer-brand" href="#home">
+      <span class="brand-symbol" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span>Zendesk</span>
+    </a>
+    <p>Internal IT support, kept close to the work.</p>
+    <div class="footer-meta">
+      <span>Local service · health reflects this API process and its SQLite database.</span>
+      <span class="footer-disclaimer">Metrics are SQL-derived; seeded records are identified as illustrative demo content. No third-party certification is claimed.</span>
+    </div>
+  </footer>
+</body>
+</html>
