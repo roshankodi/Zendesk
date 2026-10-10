@@ -1,77 +1,226 @@
-# Zendesk
+# Zendesk — Internal IT Support Ticket System
 
-A lightweight ticket queue for employees reporting internal IT issues and support staff triaging and resolving them. The browser UI uses semantic HTML, CSS, and vanilla JavaScript; FastAPI and SQLite provide shared persistence and live ticket telemetry.
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/backend-FastAPI-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![SQLite](https://img.shields.io/badge/database-SQLite-003B57.svg?style=flat&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Accessibility WCAG 2.1 AA](https://img.shields.io/badge/accessibility-WCAG%202.1%20AA-0052CC.svg?style=flat)](https://www.w3.org/WAI/standards-guidelines/wcag/)
+[![GitHub Copilot](https://img.shields.io/badge/accelerated%20by-GitHub%20Copilot%20(GHCP)-8957E5.svg?style=flat&logo=githubcopilot&logoColor=white)](https://github.com/features/copilot)
+[![Dev Days](https://img.shields.io/badge/event-Dev%20Days-FF5722.svg?style=flat)](https://github.com/)
 
-## Requirements
+A streamlined, local-first internal IT support ticket queue designed for employees reporting technical issues and IT support teams triaging and resolving them. Built with a modern vanilla web interface, high-performance FastAPI backend, and SQLite persistence with live telemetry and audit logging.
 
-- Python 3.10 or newer
-- A modern browser
+---
 
-## Run locally
+## 🌟 Dev Days Showcase & GitHub Copilot (GHCP)
 
-From the project directory:
+This project was built and accelerated during **Dev Days**, highlighting modern AI-assisted engineering practices powered by **GitHub Copilot (GHCP)**.
 
+- **GitHub Copilot (GHCP) Pair Programming**: Accelerated backend endpoint construction, Pydantic data modeling, and robust test case generation.
+- **Repository-Informed Instructions**: Guided by [`.github/copilot-instructions.md`](.github/copilot-instructions.md), which defines strict domain rules, accessibility guidelines, backward-compatibility contracts, and honest telemetry standards.
+- **Accessibility by Design**: Leveraged GitHub Copilot to architect multi-modal WCAG 2.1 AA compliant cues (text labels, geometric SVG shapes, 2px structural borders, and screen-reader ARIA live announcements).
+- **Zero-Bloat Philosophy**: Maintained a clean architecture using semantic HTML5, modern CSS3, vanilla JavaScript, and lightweight Python ASGI dependencies without extraneous framework baggage.
+
+---
+
+## 🎯 Key Features
+
+- **Intuitive Ticket Intake & Triage**:
+  - Quickly file tickets with title, requester, category, priority, and detailed description.
+  - Lifecycle state machine: `Open` &rarr; `In Progress` &rarr; `Resolved`.
+- **SLA Management & Priority Matrix**:
+  - Built-in SLA target tracking by priority:
+    - **Critical**: 60 minutes
+    - **High**: 240 minutes (4 hours)
+    - **Medium**: 1,440 minutes (24 hours)
+    - **Low**: 4,320 minutes (72 hours)
+  - Automatic timestamp tracking for initial response (transition to `In Progress`) and resolution (transition to `Resolved`).
+- **Quad-Layer WCAG 2.1 AA Priority Indicators**:
+  - High and Critical priority tickets never rely on color alone. Each uses:
+    1. Explicit text labels (`CRITICAL` or `HIGH PRIORITY`).
+    2. Distinct geometric SVG icons (`aria-hidden="true"`).
+    3. Distinct 2px high-contrast structural borders and surface treatment.
+    4. Programmatic screen-reader cues via ARIA attributes.
+- **Real-Time SQL Telemetry & Metrics**:
+  - Real calculations derived directly from SQLite timestamps: median first response time, SLA compliance percentage, and monthly resolution totals.
+  - Metric provenance honesty: displays `null` / `—` when insufficient data exists rather than inventing metrics; clearly demarcates illustrative demo records.
+- **Immutable Audit Logging**:
+  - Atomic transactions log all actions (`TICKET_CREATED`, `STATUS_CHANGED`, `PRIORITY_CHANGED`, `TICKET_DELETED`, `LEGACY_TICKET_IMPORTED`) with previous/new values and ISO timestamps.
+- **Lossless Browser Migration**:
+  - Backward-compatible import endpoint (`/api/tickets/import-legacy`) that idempotently imports legacy browser `localStorage` tickets into SQLite without data loss.
+- **System Health Monitoring**:
+  - Real database and process health telemetry (`/api/health`) reporting live connection status, uptime in seconds, and memory working set usage.
+- **Hardened Local Security**:
+  - Restrictive Content Security Policy (`CSP`), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, and `Cache-Control: no-store` headers.
+
+---
+
+## 🏗️ Architecture & Project Structure
+
+```
+Zendesk/
+├── .github/
+│   └── copilot-instructions.md   # GitHub Copilot (GHCP) project rules & conventions
+├── tests/
+│   └── test_server.py           # Comprehensive unittest suite for API & database
+├── app.js                       # Vanilla JavaScript client logic & DOM management
+├── favicon.svg                  # Zendesk branded SVG favicon
+├── index.html                   # Semantic HTML5 accessible frontend
+├── PRODUCT.md                   # Product specification & UX guidelines
+├── README.md                    # Project documentation
+├── requirements.txt             # Python runtime dependencies
+├── seed_demo.py                 # Idempotent demo dataset generator
+├── server.py                    # FastAPI application, SQLite DAL & endpoints
+└── styles.css                   # Modern CSS3 design tokens & responsive layout
+```
+
+---
+
+## ⚡ Quick Start
+
+### Prerequisites
+- **Python 3.10** or higher
+- A modern web browser (Edge, Chrome, Firefox, Safari)
+
+### 1. Clone & Set Up Virtual Environment
+
+**On Windows (PowerShell):**
 ```powershell
+git clone https://github.com/roshankodi/Zendesk.git
+cd Zendesk
+
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
+```
+
+**On macOS / Linux (bash/zsh):**
+```bash
+git clone https://github.com/roshankodi/Zendesk.git
+cd Zendesk
+
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+### 2. Run the Development Server
+
+Start FastAPI with hot reload:
+```powershell
 python -m uvicorn server:app --reload
 ```
 
-Open `http://127.0.0.1:8000`. The SQLite database is created as `tickets.sqlite3` in the project directory. Set `TICKET_DB_PATH` to use another database path.
+The application will be live at:
+**[http://127.0.0.1:8000](http://127.0.0.1:8000)**
 
-## Deployment and security boundary
+> [!NOTE]
+> The SQLite database file is automatically created as `tickets.sqlite3` in the project root on first start. You can customize the database path by setting the `TICKET_DB_PATH` environment variable.
 
-This application has no authentication or authorization. Keep it bound to `127.0.0.1` and use it only in a trusted local environment; do not expose it directly to the internet or an untrusted network. A production deployment for multiple users requires an authenticated access layer and HTTPS at a trusted reverse proxy. The app adds restrictive content, framing, referrer, and permissions headers and prevents API responses from being cached, but those controls do not replace authentication, network isolation, HTTPS, backups, or operational monitoring.
+### 3. (Optional) Seed Illustrative Demo Data
 
-For a local non-reloading run, start the same ASGI app without `--reload`:
-
-```powershell
-python -m uvicorn server:app --host 127.0.0.1 --port 8000
-```
-
-Install only the runtime packages listed in `requirements.txt`, which defines the supported version ranges. Keep the SQLite database on a persistent, backed-up disk. The API and page are same-origin and require no CORS configuration.
-
-To start the API with illustrative tickets for exploring the queue and filtering:
+Populate the database with a pre-configured sample ticket queue to test filtering, SLA calculations, and triage flows:
 
 ```powershell
 python seed_demo.py
 ```
 
-Seeded records are explicitly marked as demo content. When demo records are present, the page labels KPI telemetry as illustrative. Do not treat demo-derived metrics as organization performance.
+> [!TIP]
+> Seeded records are explicitly tagged as demo records (`is_demo = 1`). In compliance with product honesty guidelines, the UI visibly marks KPI telemetry as illustrative when demo data is present.
 
-## Features
+---
 
-- Create and search tickets by ID, title, and requester.
-- Filter the ticket queue and preview board by priority.
-- Change status between Open, In Progress, and Resolved; update priority.
-- Delete tickets with confirmation.
-- Display SQL-derived status totals, first-response time, SLA compliance, and monthly resolutions when the required data exists.
-- Show a server and database health status from a real health check.
-- Record ticket creation, status/priority changes, and deletion in the SQLite audit log.
-- Import tickets from the former browser-local `mini-it-support-tickets` storage key once records are submitted to the backend. Local data is retained as a backup and not silently deleted.
-- Serve a Zendesk-branded SVG favicon and page metadata; use restrictive response headers and no-store caching for API data.
+## 🔌 API Reference
 
-High and critical priority use explicit labels, geometric icons, ARIA text, and distinct 2px structural emphasis. The app keeps the existing three ticket statuses.
+All API responses use JSON and include restrictive security and `no-store` cache headers.
 
-## API
+### Health & Metrics
 
-- `GET /api/health` — process uptime, database connectivity, and timestamp.
-- `GET /api/metrics` — SQL-derived ticket and SLA metrics, plus telemetry provenance.
-- `GET /api/tickets?priority=High&status=Open&search=network` — list and filter tickets.
-- `GET /api/tickets/{ticket_id}` — retrieve a ticket by its `TICK-...` ID or legacy ID.
-- `POST /api/tickets` — create a ticket.
-- `POST /api/tickets/import-legacy` — idempotently import legacy browser tickets.
-- `PATCH /api/tickets/{ticket_id}` — update status and/or priority.
-- `DELETE /api/tickets/{ticket_id}` — soft-delete a ticket while retaining audit history.
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/health` | Service uptime, memory usage, and SQLite connectivity check. |
+| `GET` | `/api/metrics` | SQL-calculated telemetry: median first response, SLA compliance rate, resolutions this month, and demo data presence flag. |
 
-New-ticket SLA targets are Critical: 60 minutes, High: 240 minutes, Medium: 1440 minutes, and Low: 4320 minutes. First response is recorded on the first transition to In Progress. A resolution time is recorded on transition to Resolved. SLA compliance uses resolved tickets with recorded timestamps; response-time reporting uses tickets with a recorded first response. When no eligible records exist, the API returns `null` for that metric rather than inventing a value.
+#### Example Health Response:
+```json
+{
+  "status": "healthy",
+  "database": "connected",
+  "uptime_seconds": 124.5,
+  "memory_usage_bytes": 31457280,
+  "timestamp": "2026-10-10T05:36:42Z"
+}
+```
 
-## Verification
+### Ticket Management
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/tickets` | List tickets with optional query filters: `?priority=High&status=Open&search=wifi`. |
+| `GET` | `/api/tickets/{reference}` | Get single ticket details and complete audit history by reference (`TICK-0001` or legacy ID). |
+| `POST` | `/api/tickets` | Create a new ticket (Status defaults to `Open`). |
+| `PATCH` | `/api/tickets/{reference}` | Update ticket `status` (`Open`, `In Progress`, `Resolved`) and/or `priority`. |
+| `DELETE` | `/api/tickets/{reference}` | Soft-delete a ticket while permanently retaining audit log entries. |
+| `POST` | `/api/tickets/import-legacy` | Idempotently import legacy browser `localStorage` tickets into SQLite. |
+
+#### Create Ticket Request Body (`POST /api/tickets`):
+```json
+{
+  "title": "Cannot connect to VPN",
+  "requester": "Alex Morgan",
+  "category": "Network",
+  "priority": "High",
+  "description": "VPN connection drops every 5 minutes during client calls."
+}
+```
+
+#### Update Ticket Request Body (`PATCH /api/tickets/TICK-0001`):
+```json
+{
+  "status": "In Progress",
+  "priority": "Critical"
+}
+```
+
+---
+
+## 🧪 Testing & Verification
+
+Run the automated test suite covering database transactions, API contract validation, metric aggregation, audit logs, and security headers:
 
 ```powershell
 python -m unittest discover -s tests -v
+```
+
+Tests execute against an isolated temporary SQLite database and do not touch local application records.
+
+If Node.js is installed in your environment, validate JavaScript syntax with:
+```powershell
 node --check .\app.js
 ```
 
-The tests use a temporary SQLite database and do not alter the local app database. There is no separate frontend compilation step: the production site consists of the static HTML, CSS, and JavaScript served by FastAPI. Syntax-check JavaScript with Node.js available.
+---
+
+## 🛡️ Security Boundary & Production Notice
+
+- **Authentication**: This application is intentionally built without an authentication layer for lightweight local or single-tenant trusted use.
+- **Network Isolation**: By default, bind only to `127.0.0.1`. Do not expose directly to an untrusted public network or the internet without a reverse proxy (e.g., Nginx, Caddy) providing TLS/HTTPS, authentication, rate limiting, and access control.
+- **Integrity**: Parameterized SQL queries and strict Pydantic models protect against SQL injection and malformed input.
+
+---
+
+## 🤝 Contributing & Copilot Guidelines
+
+Contributions are welcome! When developing with AI coding assistants such as **GitHub Copilot (GHCP)**, please adhere to [`.github/copilot-instructions.md`](.github/copilot-instructions.md):
+- Keep frontend vanilla (no added frameworks or unnecessary build tooling).
+- Preserve backward-compatibility for database schemas and API response contracts.
+- Strictly uphold WCAG 2.1 AA multi-modal accessibility cues.
+- Maintain transparent product truth and data integrity.
+
+---
+
+## 📄 License
+
+Open-source under the [MIT License](LICENSE) (or organizational internal standard).
+Developed with 💙 during **Dev Days** with **GitHub Copilot (GHCP)**.
